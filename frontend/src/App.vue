@@ -3,19 +3,23 @@ import Login from './components/Login.vue'
 </script>
 
 <template>
-  <div>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+<!--  <div>-->
+<!--    <a href="https://vuejs.org/" target="_blank">-->
+<!--      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />-->
+<!--    </a>-->
 
-  </div>
+<!--  </div>-->
 
-  <h1> 欢迎使用 </h1>
-  <Login />
+<!--  <h1> 欢迎使用 </h1>-->
+  <router-view />
 
 </template>
 
 <style scoped>
+* {
+  font-family: sans-serif;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

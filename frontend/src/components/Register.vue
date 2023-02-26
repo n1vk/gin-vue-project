@@ -1,11 +1,12 @@
 <script setup>
+import {computed, ref} from "vue";
+import axios from "axios";
 import AccountForm from "./AccountForm.vue";
+
 </script>
 
 <template>
-  <div class="flex flex-col justify-center w-full ">
-    <AccountForm/>
-  </div>
+  <AccountForm/>
 </template>
 
 <style scoped>
