@@ -1,21 +1,41 @@
-<template>
+<script setup>
+import {ref} from "vue";
+import axios from "axios";
 
+const userName = ref('')
+const password = ref('')
+
+async function login() {
+  // console.log(userName.value)
+  // console.log(password.value)
+
+    try {
+      const response = await axios.get('/log', {
+      params: {
+        Acc: userName.value,
+        Pwd: password.value
+      }
+    })
+      console.log(response.data)
+    } catch (e) {
+      console.log(e)
+    }
+
+}
+
+const prompt = "xxx"
+</script>
+
+<template>
   <div>
       <span> 用户名　</span>
-      <input type="text" id="acc_input" class="input_box" :value="accContent" />
+      <input class="input_box" v-model="userName" :placeholder="prompt"/>
       <br><br>
       <span> 密　码　</span>
-      <input type="password" id="pwd_input" class="input_box"/>
+      <input type="password" id="pwd_input" class="input_box" v-model="password"/>
   </div>
-
-  <button class="login_button" >登录</button>
+  <button class="login_button" @click="login">登录</button>
 </template>
-
-<script>
-export default {
-  name: "Login.vue",
-}
-</script>
 
 <style scoped>
 .login_button {
