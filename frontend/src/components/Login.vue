@@ -6,6 +6,8 @@ import AccountForm from "./AccountForm.vue";
   <div class="flex flex-col justify-center w-full ">
     <AccountForm/>
   </div>
+
+
 </template>
 
 <style scoped>
