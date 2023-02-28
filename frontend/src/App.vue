@@ -1,33 +1,21 @@
 <script setup>
-import Login from './components/Login.vue'
+import {HomeFilled} from '@element-plus/icons-vue'
 </script>
 
 <template>
-<!--  <div>-->
-<!--    <a href="https://vuejs.org/" target="_blank">-->
-<!--      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />-->
-<!--    </a>-->
 
-<!--  </div>-->
+  <div class="flex object-top p-5 bg-blue-400 shadow-md -mb-10">
+    <router-link to="/" v-slot="{navigate}">
+      <HomeFilled style="width: 1.875rem; height: 2.25rem; margin-right: 30px" color="white" @click="navigate"/>
+    </router-link>
 
-<!--  <h1> 欢迎使用 </h1>-->
+    <h1 class="text-3xl text-white"> 欢迎使用 </h1>
+  </div>
+
   <router-view />
 
 </template>
 
 <style scoped>
-* {
-  font-family: sans-serif;
-}
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
 </style>
