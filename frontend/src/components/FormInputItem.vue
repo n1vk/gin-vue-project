@@ -1,15 +1,15 @@
 <script setup xmlns="">
 import '@material/web/textfield/outlined-text-field'
 
-const props = defineProps(['label'])
-
+defineProps(['label', 'type', 'modelValue'])
+defineEmits(['update:modelValue'])
 
 </script>
 
 <template>
-  <div class="my-3">
+  <div class="w-1/2 flex justify-center">
 
-  <md-outlined-text-field :label="props.label">
+  <md-outlined-text-field :label="label" :type="type" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" class="w-full">
     <div style="font-size: 20px" slot="leadingicon">
       <slot name="icon"/>
     </div>

@@ -1,8 +1,8 @@
 package Data
 
 type User struct {
-	Account  int
-	Password string
+	Account  int    `json:"acc"`
+	Password string `json:"pwd"`
 }
 
 var AllUsers []User

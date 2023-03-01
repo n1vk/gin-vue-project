@@ -5,6 +5,7 @@ import {HomeFilled} from '@element-plus/icons-vue'
 <template>
 
   <div class="flex object-top p-5 bg-blue-400 shadow-md -mb-10">
+
     <router-link to="/" v-slot="{navigate}">
       <HomeFilled style="width: 1.875rem; height: 2.25rem; margin-right: 30px" color="white" @click="navigate"/>
     </router-link>
