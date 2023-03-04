@@ -2,6 +2,7 @@ package LoginSystem
 
 import (
 	"backend/Data"
+	"backend/JWT"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -86,11 +87,20 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	data := make(map[string]interface{})
+	token, err := JWT.GenToken(account)
+	if err != nil {
+
+	} else {
+		data["token"] = token
+	}
+
 	// c.String(http.StatusOK, "登录成功")
 	c.JSON(http.StatusOK, gin.H{
 		"status":  "success",
 		"message": "登录成功",
 		"account": account,
+		"data":    data,
 	})
 	// Give Token
 }
