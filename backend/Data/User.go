@@ -1,8 +1,9 @@
 package Data
 
 type User struct {
-	Account  int    `json:"acc"`
-	Password string `json:"pwd"`
+	Account  string `json:"account"`
+	Password string `json:"password"`
 }
 
+// AllUsers 数据结构应当在连接数据库后被移除
 var AllUsers []User

@@ -1,62 +1,26 @@
 package LoginSystem
 
 import (
+	"backend/AuthSystem"
 	"backend/Data"
-	"backend/JWT"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 )
 
-func isExist(acc int) bool {
-	if len(Data.AllUsers) == 0 {
-		return false
-	} else {
-		for _, u := range Data.AllUsers {
-			if u.Account == acc {
-				return true
-			}
-		}
-	}
-
-	return false
-}
-
-func isCorrect(acc int, pwd string) bool {
-	for _, u := range Data.AllUsers {
-		if u.Account == acc {
-			if u.Password == pwd {
-				return true
-			}
-		}
-	}
-
-	return false
-}
-
-func addUser(acc int, pwd string) {
-	var usr Data.User
-	usr.Account = acc
-	usr.Password = pwd
-	Data.AllUsers = append(Data.AllUsers, usr)
-}
-
 func Register(c *gin.Context) {
-	var account, _ = strconv.Atoi(c.Request.FormValue("Acc"))
-	var password = c.Request.FormValue("Pwd")
+	var account = c.Request.FormValue("account")
+	var password = c.Request.FormValue("password")
 
-	if isExist(account) {
-		// c.String(http.StatusOK, "已存在用户")
+	if IsExist(account) {
 		c.JSON(http.StatusOK, gin.H{
-			"status":  "existent",
+			"code":    Data.ERROR_EXISTED_USER,
 			"message": "已存在用户",
 			"account": account,
 		})
 	} else {
-		addUser(account, password)
-		// c.String(http.StatusOK, "已注册")
+		AddUser(account, password)
 		c.JSON(http.StatusOK, gin.H{
-			"status":  "registered",
+			"code":    Data.REGISTER_SUCCESS,
 			"message": "注册成功",
 			"account": account,
 		})
@@ -64,50 +28,40 @@ func Register(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	var account, _ = strconv.Atoi(c.Request.FormValue("Acc"))
-	var password = c.Request.FormValue("Pwd")
+	var account = c.Request.FormValue("account")
+	var password = c.Request.FormValue("password")
 
-	if !isExist(account) {
-		// c.String(http.StatusOK, "用户名或密码错误") // 用户不存在
+	if !IsExist(account) {
+
 		c.JSON(http.StatusOK, gin.H{
-			"status":  "nonexistent",
+			"code":    Data.ERROR_NONEXISTENT_USER,
 			"message": "用户名或密码错误",
 			"account": account,
 		})
 		return
 	}
 
-	if !isCorrect(account, password) {
+	if !IsCorrect(account, password) {
 		// c.String(http.StatusOK, "用户名或密码错误")
 		c.JSON(http.StatusOK, gin.H{
-			"status":  "wrong-password",
+			"code":    Data.ERROR_WRONG_PASSWORD,
 			"message": "用户名或密码错误",
 			"account": account,
 		})
 		return
 	}
 
-	data := make(map[string]interface{})
-	token, err := JWT.GenToken(account)
+	// data := make(map[string]interface{})
+	token, err := AuthSystem.GenToken(account, password)
 	if err != nil {
 
 	} else {
-		data["token"] = token
+		// c.String(http.StatusOK, "登录成功")
+		c.JSON(http.StatusOK, gin.H{
+			"code":    Data.LOGIN_SUCCESS,
+			"message": "登录成功",
+			"account": account,
+			"token":   token,
+		})
 	}
-
-	// c.String(http.StatusOK, "登录成功")
-	c.JSON(http.StatusOK, gin.H{
-		"status":  "success",
-		"message": "登录成功",
-		"account": account,
-		"data":    data,
-	})
-	// Give Token
 }
-
-//func NotFound(c *gin.Context) {
-//	c.JSON(http.StatusNotFound, gin.H{
-//		"status": 404,
-//		"error":  "Resource not found",
-//	})
-//}

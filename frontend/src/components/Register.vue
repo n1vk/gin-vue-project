@@ -5,19 +5,26 @@ import FormInputItem from "./FormInputItem.vue";
 import {User, Key} from '@element-plus/icons-vue'
 import '@material/web/button/filled-button'
 import '@material/web/button/outlined-button'
+import '@material/web/dialog/dialog'
 
 const account = ref('')
 const password = ref('')
+let showDialog = ref(true)
+
+const loginDisabled = computed(() => account.value === "" || password.value === "")
 
 async function register() {
+  showDialog = true
   try {
     const response = await axios.get('/reg', {
       params: {
-        Acc: account.value,
-        Pwd: password.value
+        account: account.value,
+        password: password.value
       }
     })
+
     console.log(response.data)
+
   } catch (e) {
     console.log(e)
   }
@@ -27,23 +34,41 @@ async function register() {
 
 <template>
 
-  <div class="flex flex-col justify-center min-h-screen items-center gap-y-5 ">
+  <div class="flex flex-col justify-center min-h-screen items-center gap-y-5">
 
-    <FormInputItem label="User Name" type="text" v-model="account">
+
+    <md-dialog :open="showDialog" class="">
+
+      <div class="mb-14 flex justify-center">
+        <h2 class="text-lg font-bold">注册成功</h2>
+      </div>
+      <router-link to="/" v-slot="{navigate}" class="flex-1 flex justify-center">
+        <div class="flex justify-center">
+          <button @click="navigate" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">返回登录页面</button>
+        </div>
+      </router-link>
+
+    </md-dialog>
+
+    <FormInputItem label="注册用户名" type="text" v-model="account">
       <template v-slot:icon>
         <User style="width: 1em; height: 1em; margin-right: 8px"/>
       </template>
     </FormInputItem>
 
-    <FormInputItem label="Password" type="password" v-model="password">
+    <FormInputItem label="密码" type="password" v-model="password">
       <template v-slot:icon>
         <Key style="width: 1em; height: 1em; margin-right: 8px"/>
       </template>
     </FormInputItem>
 
     <div class="flex flex-row w-1/2 justify-center gap-x-10">
-      <md-filled-button label="注册" @click="register" class="flex-1"></md-filled-button>
+      <md-filled-button label="注册"
+                        @click="register"
+                        :disabled="loginDisabled" class="flex-1"></md-filled-button>
     </div>
+
+    <a class="text-blue-500 hover:text-red-500 underline invisible"> Placeholder </a>
 
   </div>
 
