@@ -9,7 +9,7 @@ import '@material/web/dialog/dialog'
 
 const account = ref('')
 const password = ref('')
-let showDialog = false
+const showDialog = ref(false)
 
 const loginDisabled = computed(() => account.value === "" || password.value === "")
 
@@ -24,7 +24,6 @@ async function login() {
       }
     })
     console.log(response.data)
-    showDialog = true
 
     if(response.data['code'] === 4013 || response.data['code'] === 4012) {
       // TODO: 换成提示框，并要求用户重新登录
@@ -32,7 +31,7 @@ async function login() {
     } else {
       localStorage.token = response.data['token']
       console.log(localStorage.token)
-      // TODO: 跳转到/home路径
+      showDialog.value = true
     }
 
 

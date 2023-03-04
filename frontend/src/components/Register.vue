@@ -9,7 +9,7 @@ import '@material/web/dialog/dialog'
 
 const account = ref('')
 const password = ref('')
-let showDialog = ref(true)
+const showDialog = ref(false)
 
 const loginDisabled = computed(() => account.value === "" || password.value === "")
 
@@ -28,8 +28,7 @@ async function register() {
       // TODO: 换成提示框，并留在页面
       alert("已存在的用户名")
     } else {
-      // TODO: 让提示框显示出来，这个提示框应该能够跳转
-      showDialog = true
+      showDialog.value = true
     }
 
 
