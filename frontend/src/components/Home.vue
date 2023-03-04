@@ -6,6 +6,7 @@ async function send() {
   try {
     const response = await axios.get('/home/hello', {
       params : {
+        // 如果这里 token 是 undefined 就会返回403
         token: localStorage.token
       }
     })

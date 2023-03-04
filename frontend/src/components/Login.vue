@@ -27,11 +27,14 @@ async function login() {
     showDialog = true
 
     if(response.data['code'] === 4013 || response.data['code'] === 4012) {
+      // TODO: 换成提示框，并要求用户重新登录
       alert("密码错误")
+    } else {
+      localStorage.token = response.data['token']
+      console.log(localStorage.token)
+      // TODO: 跳转到/home路径
     }
 
-    localStorage.token = response.data['token']
-    console.log(localStorage.token)
 
   } catch (e) {
     console.log(e)
@@ -44,6 +47,7 @@ async function login() {
 <template>
   <div class="flex flex-col justify-center min-h-screen items-center gap-y-5">
 
+  <!-- TODO: 不能操控显示 -->
     <md-dialog :open="showDialog" class="">
 
       <div class="mb-14 flex justify-center">
