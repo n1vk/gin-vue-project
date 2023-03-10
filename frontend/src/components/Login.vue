@@ -1,16 +1,19 @@
 <script setup>
 import {computed, ref} from "vue";
 import axios from "axios";
+import sha256 from "js-sha256"
 import FormInputItem from "./FormInputItem.vue";
 import {User, Key} from '@element-plus/icons-vue'
 import '@material/web/button/filled-button'
 import '@material/web/button/outlined-button'
 import '@material/web/dialog/dialog'
 
+
 const account = ref('')
 const password = ref('')
-const showDialog = ref(false)
 
+const showSuccessDialog = ref(false)
+const showFailDialog = ref(false)
 const loginDisabled = computed(() => account.value === "" || password.value === "")
 
 
@@ -19,19 +22,19 @@ async function login() {
   try {
     const response = await axios.get('/log', {
       params: {
-        account: account.value,
-        password: password.value
+        account: sha256(account.value),
+        password: sha256(password.value),
       }
     })
     console.log(response.data)
 
     if(response.data['code'] === 4013 || response.data['code'] === 4012) {
-      // TODO: 换成提示框，并要求用户重新登录
-      alert("密码错误")
+      showFailDialog.value = true;
     } else {
-      localStorage.token = response.data['token']
-      console.log(localStorage.token)
-      showDialog.value = true
+      // localStorage.token = response.data['token']
+      localStorage.setItem("token", response.data['token'])
+      console.log(localStorage.getItem("token"))
+      showSuccessDialog.value = true
     }
 
 
@@ -46,9 +49,7 @@ async function login() {
 <template>
   <div class="flex flex-col justify-center min-h-screen items-center gap-y-5">
 
-  <!-- TODO: 不能操控显示 -->
-    <md-dialog :open="showDialog" class="">
-
+    <md-dialog :open="showSuccessDialog" class="">
       <div class="mb-14 flex justify-center">
         <h2 class="text-lg font-bold">登录成功</h2>
       </div>
@@ -57,8 +58,18 @@ async function login() {
           <button @click="navigate" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">进入系统</button>
         </div>
       </router-link>
-
     </md-dialog>
+
+    <md-dialog :open="showFailDialog" class="">
+      <div class="mb-14 flex justify-center">
+        <h2 class="text-lg font-bold">用户名或密码错误</h2>
+      </div>
+
+      <div class="flex justify-center">
+        <button @click="showFailDialog = false" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">重新输入</button>
+      </div>
+    </md-dialog>
+
 
     <FormInputItem label="登录用户名" type="text" v-model="account" >
       <template v-slot:icon>

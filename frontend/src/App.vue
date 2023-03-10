@@ -17,6 +17,8 @@ import {HomeFilled} from '@element-plus/icons-vue'
 
 </template>
 
-<style scoped>
-
+<style>
+  ::-webkit-scrollbar {
+    display: none;
+  }
 </style>

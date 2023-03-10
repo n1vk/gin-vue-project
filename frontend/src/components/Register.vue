@@ -1,6 +1,7 @@
 <script setup>
 import {computed, ref} from "vue";
 import axios from "axios";
+import sha256 from "js-sha256"
 import FormInputItem from "./FormInputItem.vue";
 import {User, Key} from '@element-plus/icons-vue'
 import '@material/web/button/filled-button'
@@ -9,7 +10,9 @@ import '@material/web/dialog/dialog'
 
 const account = ref('')
 const password = ref('')
-const showDialog = ref(false)
+
+const showSuccessDialog = ref(false)
+const showFailDialog = ref(false)
 
 const loginDisabled = computed(() => account.value === "" || password.value === "")
 
@@ -18,19 +21,17 @@ async function register() {
   try {
     const response = await axios.get('/reg', {
       params: {
-        account: account.value,
-        password: password.value
+        account: sha256(account.value),
+        password: sha256(password.value),
       }
     })
     console.log(response.data)
 
-    if(response.data['code'] === 4014) {
-      // TODO: 换成提示框，并留在页面
-      alert("已存在的用户名")
+    if (response.data['code'] === 4014) {
+      showFailDialog.value = true
     } else {
-      showDialog.value = true
+      showSuccessDialog.value = true
     }
-
 
 
   } catch (e) {
@@ -42,20 +43,31 @@ async function register() {
 
 <template>
 
+
   <div class="flex flex-col justify-center min-h-screen items-center gap-y-5">
 
-
-    <md-dialog :open="showDialog" class="">
-
+    <md-dialog :open="showSuccessDialog" class="">
       <div class="mb-14 flex justify-center">
         <h2 class="text-lg font-bold">注册成功</h2>
       </div>
       <router-link to="/" v-slot="{navigate}" class="flex-1 flex justify-center">
         <div class="flex justify-center">
-          <button @click="navigate" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">返回登录页面</button>
+          <button @click="navigate" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            返回登录页面
+          </button>
         </div>
       </router-link>
+    </md-dialog>
 
+    <md-dialog :open="showFailDialog" class="">
+      <div class="mb-14 flex justify-center">
+        <h2 class="text-lg font-bold">用户名已存在</h2>
+      </div>
+      <div class="flex justify-center">
+        <button @click="showFailDialog = false"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">重新输入
+        </button>
+      </div>
     </md-dialog>
 
     <FormInputItem label="注册用户名" type="text" v-model="account">
