@@ -22,7 +22,7 @@ async function login() {
   try {
     const response = await axios.get('/log', {
       params: {
-        account: sha256(account.value),
+        account: account.value,
         password: sha256(password.value),
       }
     })

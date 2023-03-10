@@ -7,18 +7,20 @@ import (
 	"net/http"
 )
 
+var db = InitDatabase()
+
 func Register(c *gin.Context) {
 	var account = c.Request.FormValue("account")
 	var password = c.Request.FormValue("password")
 
-	if IsExist(account) {
+	if IsExist(db, account) {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    Data.ERROR_EXISTED_USER,
 			"message": "已存在用户",
 			"account": account,
 		})
 	} else {
-		AddUser(account, password)
+		AddUser(db, account, password)
 		c.JSON(http.StatusOK, gin.H{
 			"code":    Data.REGISTER_SUCCESS,
 			"message": "注册成功",
@@ -31,7 +33,7 @@ func Login(c *gin.Context) {
 	var account = c.Request.FormValue("account")
 	var password = c.Request.FormValue("password")
 
-	if !IsExist(account) {
+	if !IsExist(db, account) {
 
 		c.JSON(http.StatusOK, gin.H{
 			"code":    Data.ERROR_NONEXISTENT_USER,
@@ -41,7 +43,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	if !IsCorrect(account, password) {
+	if !IsCorrect(db, account, password) {
 		// c.String(http.StatusOK, "用户名或密码错误")
 		c.JSON(http.StatusOK, gin.H{
 			"code":    Data.ERROR_WRONG_PASSWORD,

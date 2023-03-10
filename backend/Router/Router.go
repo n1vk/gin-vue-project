@@ -9,6 +9,7 @@ import (
 )
 
 func InitRouter() {
+
 	// 创建默认的 gin.Engine
 	var router = gin.Default()
 
