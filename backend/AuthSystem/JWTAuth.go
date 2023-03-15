@@ -20,8 +20,10 @@ func JWT() gin.HandlerFunc {
 
 		// 从收到的数据包中获得token
 		// 前端所有对/home的请求应该有token=xxx
-		token := c.Query("token")
-		if token == "" {
+		// token := c.Query("token")
+		token, err := c.Cookie("token")
+
+		if err != nil {
 			code = Data.INVALID_PARAMS
 		} else {
 			payload, err := ParseToken(token)

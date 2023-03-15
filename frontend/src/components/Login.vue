@@ -32,8 +32,8 @@ async function login() {
       showFailDialog.value = true;
     } else {
       // localStorage.token = response.data['token']
-      localStorage.setItem("token", response.data['token'])
-      console.log(localStorage.getItem("token"))
+      // localStorage.setItem("token", response.data['token'])
+      // console.log(localStorage.getItem("token"))
       showSuccessDialog.value = true
     }
 

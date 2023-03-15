@@ -30,5 +30,5 @@ func InitRouter() {
 		// 其他的路径路由添加在这里
 	}
 
-	router.Run(":33445")
+	router.Run("0.0.0.0:33445")
 }

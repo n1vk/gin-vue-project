@@ -59,11 +59,13 @@ func Login(c *gin.Context) {
 
 	} else {
 		// c.String(http.StatusOK, "登录成功")
+		c.SetCookie("token", token, 60*15, "/", "http://127.0.0.1:5173", false, true)
+		println("set!")
 		c.JSON(http.StatusOK, gin.H{
 			"code":    Data.LOGIN_SUCCESS,
 			"message": "登录成功",
 			"account": account,
-			"token":   token,
+			//"token":   token,
 		})
 	}
 }

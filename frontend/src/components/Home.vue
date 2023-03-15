@@ -8,12 +8,13 @@ const qualified = ref(false)
 
 async function send() {
   try {
-    const response = await axios.get('/home/hello', {
-      params: {
-        // 如果这里 token 是 undefined 就会返回403
-        token: localStorage.token
-      }
-    })
+    // const response = await axios.get('/home/hello', {
+    //   params: {
+    //     // 如果这里 token 是 undefined 就会返回403
+    //     token: localStorage.token
+    //   }
+    // })
+    const response = await axios.get('/home/hello')
     console.log(response.data)
 
   } catch (e) {
